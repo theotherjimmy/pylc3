@@ -3,6 +3,7 @@
 import pylc3
 import unittest
 from LC3Helper import *
+from grader import doTest
 false = False
 true = True
 
@@ -175,19 +176,6 @@ class TestBreakPoint(unittest.TestCase):
   #If Prints OK then ALL TESTS PASSED
   # YAY 
   # unittest.main()
-
-def doTest(testCase):
-  print "-------------------------------------"
-
-  suite = unittest.TestLoader().loadTestsFromTestCase(testCase)
-  res = unittest.TextTestRunner(verbosity=2).run(suite)
-  
-  print "List of Test Errors", res.errors
-  print "List of Test Failures", res.failures
-  print "List of Test Unexpected Successes", res.unexpectedSuccesses
-  print "Num Tests Run:", res.testsRun
-  print "Was Successful ?:", res.wasSuccessful() 
-  print "-------------------------------------"
 
 doTest(TestAdd)
 doTest(TestAnd)
