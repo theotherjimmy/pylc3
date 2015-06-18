@@ -35,7 +35,7 @@ void doJack(uint16_t, uint16_t);
  * @brief Basic LC3 Simulator Class
  * @details This class is exposed to the Python Interface,
  * CLI, and GUI
- * 
+ *
  */
 class simulator{
 public:
@@ -60,6 +60,8 @@ public:
         void setOnEndOfCycle(std::function<void (void)> handlerFunction);
         void setRefreshGUIMemHook(std::function<void (void)> handlerFunction);
         void refreshGUIMemCall(void);
+        uint16_t memRead( uint16_t addr );
+        void memWrite( uint16_t addr, uint16_t newVal );
 private:
         vector<uint16_t> regs = vector<uint16_t>(NUM_REGS);
         vector<WatchPoint> watchPoints = vector<WatchPoint>();
@@ -67,8 +69,6 @@ private:
         uint16_t N, Z, P, S;
         uint16_t PC;
         void setNZP( uint16_t );
-        uint16_t memRead( uint16_t addr );
-        void memWrite( uint16_t addr, uint16_t newVal );
         std::function<void (uint16_t, uint16_t)> onMemChanged;
         std::function<void (void)> onEndOfCycle;
         std::function<void (void)> refreshGUIMem;
