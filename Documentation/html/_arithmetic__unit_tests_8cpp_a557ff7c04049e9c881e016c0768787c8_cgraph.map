@@ -1,6 +1,0 @@
-<map id="TEST" name="TEST">
-<area shape="rect" id="node2" href="$classsimulator.html#a99ff28d7459e1e5634f78aa204e1b81b" title="Write to the register file. " alt="" coords="119,5,244,32"/>
-<area shape="rect" id="node3" href="$classsimulator.html#a22bf3281b0165d3d93fb71658b19fdb8" title="Process an instruction. " alt="" coords="122,56,241,83"/>
-<area shape="rect" id="node4" href="$classsimulator.html#adf34711d9ba2ef3e98dea9600a44576d" title="Read from the register file. " alt="" coords="119,107,244,133"/>
-<area shape="rect" id="node5" href="$classsimulator.html#a9cc84c8d70c5095de7ea0e3cf6ff3164" title="Get a status bit from the PSR. " alt="" coords="109,157,253,184"/>
-</map>

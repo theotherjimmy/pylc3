@@ -1,9 +1,0 @@
-<map id="TEST" name="TEST">
-<area shape="rect" id="node2" href="$classsimulator.html#a99ff28d7459e1e5634f78aa204e1b81b" title="Write to the register file. " alt="" coords="119,5,244,32"/>
-<area shape="rect" id="node3" href="$classsimulator.html#a20809a32770f874231c60dec97215728" title="simulator::setPC" alt="" coords="121,56,241,83"/>
-<area shape="rect" id="node4" href="$classsimulator.html#a6cc07560fc476a4d733b8c5ff6925351" title="Set status bit in PSR. " alt="" coords="109,107,253,133"/>
-<area shape="rect" id="node5" href="$classsimulator.html#a22bf3281b0165d3d93fb71658b19fdb8" title="Process an instruction. " alt="" coords="122,157,241,184"/>
-<area shape="rect" id="node6" href="$classsimulator.html#adf34711d9ba2ef3e98dea9600a44576d" title="Read from the register file. " alt="" coords="119,208,244,235"/>
-<area shape="rect" id="node7" href="$classsimulator.html#ada54a778a08fd580bf17ba2599f0bca6" title="Set the Current PC. " alt="" coords="121,259,241,285"/>
-<area shape="rect" id="node8" href="$classsimulator.html#a9cc84c8d70c5095de7ea0e3cf6ff3164" title="Get a status bit from the PSR. " alt="" coords="109,309,253,336"/>
-</map>

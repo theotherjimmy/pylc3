@@ -1,9 +1,0 @@
-<map id="simulator.hpp" name="simulator.hpp">
-<area shape="rect" id="node2" href="$py_interface_8cpp.html" title="pythonInterface/pyInterface.cpp" alt="" coords="5,80,211,107"/>
-<area shape="rect" id="node3" href="$simulator_8cpp.html" title="simulator.cpp" alt="" coords="235,80,335,107"/>
-<area shape="rect" id="node4" href="$_arithmetic__unit_tests_8cpp.html" title="tests/Arithmetic_unitTests.cpp" alt="" coords="359,80,557,107"/>
-<area shape="rect" id="node5" href="$_branch__unit_tests_8cpp.html" title="tests/Branch_unitTests.cpp" alt="" coords="583,80,765,107"/>
-<area shape="rect" id="node6" href="$_memory__uint_tests_8cpp.html" title="tests/Memory_uintTests.cpp" alt="" coords="790,80,977,107"/>
-<area shape="rect" id="node7" href="$_r_t_i__unit_test_8cpp.html" title="tests/RTI_unitTest.cpp" alt="" coords="1002,80,1157,107"/>
-<area shape="rect" id="node8" href="$_t_r_a_p__uint_test_8cpp.html" title="tests/TRAP_uintTest.cpp" alt="" coords="1183,80,1353,107"/>
-</map>

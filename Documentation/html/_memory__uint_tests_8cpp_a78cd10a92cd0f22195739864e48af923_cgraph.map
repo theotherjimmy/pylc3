@@ -1,6 +1,0 @@
-<map id="TEST" name="TEST">
-<area shape="rect" id="node2" href="$classsimulator.html#a20809a32770f874231c60dec97215728" title="simulator::setPC" alt="" coords="112,5,232,32"/>
-<area shape="rect" id="node3" href="$classsimulator.html#a99ff28d7459e1e5634f78aa204e1b81b" title="Write to the register file. " alt="" coords="109,56,235,83"/>
-<area shape="rect" id="node4" href="$classsimulator.html#a22bf3281b0165d3d93fb71658b19fdb8" title="Process an instruction. " alt="" coords="113,107,231,133"/>
-<area shape="rect" id="node5" href="$classsimulator.html#adf34711d9ba2ef3e98dea9600a44576d" title="Read from the register file. " alt="" coords="109,157,235,184"/>
-</map>
