@@ -2,10 +2,9 @@ SRC_DIRS += tests
 SRC_DIRS += src
 
 ifeq (,$(filter _%,$(notdir ${CURDIR})))
-include target.mk
-
 SRCS := $(wildcard $(addsuffix /*.cpp, ${SRC_DIRS}))
-
+python-tests := $(wildcard tests/*Test.py)
+include target.mk
 else
 
 VPATH = ${SRCDIR}
@@ -50,7 +49,6 @@ OBJS := ${SRCS:.cpp=.o}
 DEPS := ${SRCS:.cpp=.d}
 TEST := lc3_unittest
 PYLC3 := pylc3.so
-python-tests := $(wildcard tests/*Test.py)
 
 $(eval $(shell mkdir -p ${SRC_DIRS}))
 

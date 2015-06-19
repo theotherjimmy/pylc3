@@ -8,7 +8,7 @@ endif
 OBJDIR := _${_ARCH}
 
 MAKETARGET = ${MAKE} --no-print-directory -C $@ -f ${CURDIR}/Makefile \
-		SRCDIR=${CURDIR} SRCS="${SRCS}"  ${MAKECMDGOALS}
+		SRCDIR=${CURDIR} SRCS="${SRCS}" python-tests="${python-tests}"  ${MAKECMDGOALS}
 
 .PHONY: ${OBJDIR}
 
