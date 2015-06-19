@@ -20,8 +20,11 @@ bool simulator::stepN( int cycles ) {
                              ; it != this->breakPoints.end()
                              ; ++it){
                         if (it->address == this->PC) {
-                                boost::python::call<void>(it->cb
-                                                          , it->address);
+                                if (it->PythonP)
+                                        boost::python::call<void>(it->Pycb
+                                                                  , it->address);
+                                else if (it->Ccb)
+                                        it->Ccb(it->address);
                         }
                 }
         }while (exceptionP && ((cycles == 0) || (cyclesElapsed < cycles)));
@@ -79,14 +82,19 @@ bool simulator::loadBinFile( std::string filename ) {
  * @brief call watchpoint callbacks
  * @details Watchpoints have python callbacks, e.g. a print function
  * or some other process. Equivelent to onChanged(mem[Address]) do callback
- * 
+ *
  * @param WatchPoint Triggered watch point
  */
 void callCallback (struct WatchPoint toCall) {
-        boost::python::call<void>(toCall.cb
-                                  , toCall.address
-                                  , toCall.prevVal
-                                  , toCall.currVal);
+        if (toCall.PythonP)
+                boost::python::call<void>(toCall.Pycb
+                                          , toCall.address
+                                          , toCall.prevVal
+                                          , toCall.currVal);
+        else if (toCall.Ccb)
+                toCall.Ccb(toCall.address
+                              , toCall.prevVal
+                              , toCall.currVal);
 }
 
 /**
@@ -402,10 +410,27 @@ bool simulator::setPC(uint16_t pc){
  * @param cb call back function on event triggered
  * @return successful?
  */
-bool simulator::addWatchPoint(uint16_t addr, bool read, bool write, PyObject* cb){
+bool simulator::addWatchPointPy(uint16_t addr, bool read, bool write, PyObject* cb){
         if(addr >= 1 << 16) return false;
         WatchPoint wp;
-        wp.cb = cb;
+        wp.PythonP = true;
+        wp.Pycb = cb;
+        wp.address = addr;
+        wp.readPoint = read;
+        wp.writePoint = write;
+        wp.prevVal = memory[addr];
+        wp.currVal = memory[addr];
+        watchPoints.push_back(wp);
+        return true;
+}
+
+bool simulator::addWatchPoint(uint16_t addr, bool read, bool write
+                              , std::function<void (uint16_t, uint16_t, uint16_t)>
+                              cb){
+        if(addr >= 1 << 16) return false;
+        WatchPoint wp;
+        wp.PythonP = false;
+        wp.Ccb = cb;
         wp.address = addr;
         wp.readPoint = read;
         wp.writePoint = write;
@@ -423,10 +448,21 @@ int simulator::getNumWatchPoints(){
         return this->watchPoints.size();
 }
 
-bool simulator::addBreakPoint(uint16_t addr, PyObject* cb) {
+bool simulator::addBreakPointPy(uint16_t addr, PyObject* cb) {
         if(addr >= 1<<16) return false;
         BreakPoint bp;
-        bp.cb = cb;
+        bp.PythonP = true;
+        bp.Pycb = cb;
+        bp.address = addr;
+        breakPoints.push_back(bp);
+        return true;
+}
+
+bool simulator::addBreakPoint(uint16_t addr, std::function<void (uint16_t)> cb) {
+        if(addr >= 1<<16) return false;
+        BreakPoint bp;
+        bp.PythonP = false;
+        bp.Ccb = cb;
         bp.address = addr;
         breakPoints.push_back(bp);
         return true;

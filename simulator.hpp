@@ -16,21 +16,25 @@ using std::vector;
 struct WatchPoint;
 class simulator;
 
+
 struct WatchPoint {
         uint16_t address;
         uint16_t prevVal;
         uint16_t currVal;
         bool readPoint;
         bool writePoint;
-        PyObject *cb;
-
+        bool PythonP;
+        PyObject *Pycb;
+        std::function<void (uint16_t, uint16_t, uint16_t)> Ccb ;
 };
+
 struct BreakPoint {
         uint16_t address;
-        PyObject *cb;
+        bool PythonP;
+        PyObject *Pycb;
+        std::function<void (uint16_t)> Ccb;
 };
 
-void doJack(uint16_t, uint16_t);
 /**
  * @brief Basic LC3 Simulator Class
  * @details This class is exposed to the Python Interface,
@@ -51,8 +55,11 @@ public:
         uint16_t getPC(void);
         bool setPC(uint16_t);
 
-        bool addWatchPoint(uint16_t addr, bool read, bool write, PyObject* cb);
-        bool addBreakPoint(uint16_t addr, PyObject* cb);
+        bool addWatchPointPy(uint16_t addr, bool read, bool write, PyObject* cb);
+        bool addBreakPointPy(uint16_t addr, PyObject* cb);
+        bool addWatchPoint(uint16_t addr, bool read, bool write
+                           ,std::function<void (uint16_t, uint16_t, uint16_t)> cb);
+        bool addBreakPoint(uint16_t addr, std::function<void (uint16_t)> cb);
         int getNumWatchPoints();
         bool loadBinFile(std::string);
         bool run();

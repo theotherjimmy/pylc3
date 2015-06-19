@@ -18,7 +18,6 @@ class TestAdd(unittest.TestCase):
   #All tests must have 'test_' followed by the test name
   def test_ADDR_1(self):
     self.sim.doInst(ADDR | SETDR(3) | SETSR1(0) | SETSR2(1))
-    print(self.sim.getReg(3))
     self.assertEqual(4,     self.sim.getReg(3))
     self.assertEqual(False, self.sim.getPcsrBit('n'))
     self.assertEqual(False, self.sim.getPcsrBit('z'))
@@ -106,7 +105,6 @@ class TestWatchPoint(unittest.TestCase):
     self.sim.mem[0x3003] = 0
     self.sim.mem[0x3004] = 0
     self.sim.addWatchPoint(0x3000, True, False, watch)
-    self.assertEqual(1, self.sim.getNumWatchPoints())
     self.sim.stepN(5)
     self.assertEqual(True, self.called)
 
@@ -121,7 +119,6 @@ class TestWatchPoint(unittest.TestCase):
     self.sim.mem[0x3003] = 0
     self.sim.mem[0x3004] = 0
     self.sim.addWatchPoint(0x3000, False, True, watch)
-    self.assertEqual(1, self.sim.getNumWatchPoints())
     self.sim.stepN(5)
     self.assertEqual(True, self.called)
 
@@ -136,7 +133,6 @@ class TestWatchPoint(unittest.TestCase):
     self.sim.mem[0x3003] = 0
     self.sim.mem[0x3004] = 0
     self.sim.addWatchPoint(0x3000, True, True, watch)
-    self.assertEqual(1, self.sim.getNumWatchPoints())
     self.sim.stepN(5)
     self.assertEqual(2, self.called)
 
