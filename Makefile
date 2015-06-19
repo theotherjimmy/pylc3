@@ -1,3 +1,18 @@
+SRC_DIRS += tests
+SRC_DIRS += src
+
+ifeq (,$(filter _%,$(notdir ${CURDIR})))
+include target.mk
+
+SRCS := $(wildcard $(addsuffix /*.cpp, ${SRC_DIRS}))
+
+else
+
+VPATH = ${SRCDIR}
+
+#------ end multi-achitecture Boilerplate
+
+.SUFFIXES:
 
 GTEST_DIR := ~/gtest
 GTEST_INC := $(GTEST_DIR)/include
@@ -10,10 +25,8 @@ GTEST_LIB := -lgtest
 
 PY_INC := /usr/include/python2.7/
 
-SRC_DIRS += tests
-SRC_DIRS += src
 
-INC_DIRS += inc
+INC_DIRS += ${SRCDIR}/inc
 
 CXX := g++
 CXXFLAGS += -g
@@ -33,12 +46,13 @@ LDFLAGS += -lboost_python
 LDFLAGS += -lboost_system
 LDFLAGS += -lpython2.7
 
-SRCS := $(wildcard $(addsuffix /*.cpp, ${SRC_DIRS}))
 OBJS := ${SRCS:.cpp=.o}
 DEPS := ${SRCS:.cpp=.d}
 TEST := lc3_unittest
 PYLC3 := pylc3.so
-python-tests := $(wildcard tests/*.py)
+python-tests := $(wildcard tests/*Test.py)
+
+$(eval $(shell mkdir -p ${SRC_DIRS}))
 
 all: $(PYLC3)
 
@@ -64,7 +78,11 @@ $(TEST):  $(filter-out %/pyInterface.cpp, ${OBJS})
 
 %.o: %.cpp
 	${debug}echo "C++ $^"
-	${debug}$(CXX) -c ${CXXFLAGS} -MD -o $@ $< -MT ${@:.o=.d}
+	${debug}$(CXX) -c ${CXXFLAGS} -o $@ $< 
 
 clean:
 	-${debug}rm -rf ${OBJS} ${DEPS} ${TEST}
+
+#------ begin multi-achitecture Boilerplate
+
+endif
