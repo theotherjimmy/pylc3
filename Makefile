@@ -55,15 +55,15 @@ $(eval $(shell mkdir -p ${SRC_DIRS}))
 
 all: $(PYLC3)
 
-test: cpp-test python-test
+test: cpp-test.txt python-test
 
-cpp-test: $(TEST)
-	${debug}./$(TEST)
+cpp-test.txt: $(TEST)
+	${debug}(./$< > $@ && echo "All C++ tests passed") || cat $@
 
 python-test: ${PYLC3} ${python-tests:.py=.py-test-out}
 
 %.py-test-out : %.py ${PYLC3}
-	-${debug}PYTHONPATH=$(pwd) python2 $< > $@ || cat $@
+	${debug}(PYTHONPATH=$(pwd) python2 $< 2> $@ && echo "Python tests in $< passed") || cat $@
 
 $(PYLC3): $(filter-out tests/%, ${OBJS})
 	${debug}echo "LD  $^"
