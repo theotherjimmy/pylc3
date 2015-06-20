@@ -29,6 +29,7 @@ INC_DIRS += ${SRCDIR}/inc
 
 CXX := g++
 CXXFLAGS += -g
+CXXFLAGS += -MMD
 CXXFLAGS += -I $(GTEST_INC)
 CXXFLAGS += -I $(PY_INC)
 CXXFLAGS += $(addprefix -I ,${INC_DIRS})
@@ -75,8 +76,8 @@ $(TEST):  $(filter-out %/pyInterface.cpp, ${OBJS})
 -include $(DEPS)
 
 %.o: %.cpp
-	${debug}echo "C++ $^"
-	${debug}$(CXX) -c ${CXXFLAGS} -o $@ $< 
+	${debug}echo "C++ $<"
+	${debug}$(CXX) -c ${CXXFLAGS} -o $@  $<
 
 clean:
 	-${debug}rm -rf ${OBJS} ${DEPS} ${TEST}
