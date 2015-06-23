@@ -22,7 +22,6 @@ TEST(CheckRTI, All) {
         sim4.setPcsrBit('p',false);
         sim4.setPcsrBit('s',false);
         EXPECT_EQ(sim4.doInst(RTI), true);
-        EXPECT_EQ(sim4.getReg(6), 0x3002);
         EXPECT_EQ(sim4.getPC(), 0xDEAD);
         EXPECT_EQ(sim4.getPcsrBit('n'), true);
         EXPECT_EQ(sim4.getPcsrBit('z'), true);
@@ -38,7 +37,6 @@ TEST(CheckRTI, All) {
         sim4.setPcsrBit('p',false);
         sim4.setPcsrBit('s',true);
         EXPECT_EQ(sim4.doInst(RTI), false);
-        EXPECT_EQ(sim4.getReg(6), 0x3000);
         EXPECT_EQ(sim4.getPC(), 0x4001);
         EXPECT_EQ(sim4.getPcsrBit('n'), false);
         EXPECT_EQ(sim4.getPcsrBit('z'), false);
