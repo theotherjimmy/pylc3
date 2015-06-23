@@ -58,6 +58,7 @@ all: $(PYLC3)
 test: cpp-test.txt python-test
 
 install: $(PYLC3)
+	mkdir -p ${DESTDIR}/usr/lib/python2.7/dist-packages/
 	install ${PYLC3} ${DESTDIR}/usr/lib/python2.7/dist-packages/
 
 cpp-test.txt: $(TEST)
