@@ -57,6 +57,9 @@ all: $(PYLC3)
 
 test: cpp-test.txt python-test
 
+install: $(PYLC3)
+	install ${PYLC3} ${DESTDIR}/usr/lib/python2.7/dist-packages/
+
 cpp-test.txt: $(TEST)
 	${debug}(./$< > $@ && echo "All C++ tests passed") || cat $@
 
