@@ -4,4 +4,4 @@
 	dh $@
 
 override_dh_auto_install:
-	$(MAKE) DESTDIR=$$(pwd)/debian/pylc3 install
+	$(MAKE) DESTDIR=$$(pwd)/debian/python2-pylc3 install
