@@ -168,12 +168,152 @@ class TestBreakPoint(unittest.TestCase):
     self.sim.stepN(5)
     self.assertEqual(False, self.called)
 
-# if __name__ == '__main__':
-  #If Prints OK then ALL TESTS PASSED
-  # YAY 
-  # unittest.main()
+class TestInterruptTrigger(unittest.TestCase):
+  def setUp(self):
+    self.sim = pylc3.simulator()
+
+  def test_IntTrigger(self):
+    self.called = False
+    def trigger ():
+      self.called = True
+      return True
+    self.sim.setPC(0x3000)
+    self.sim.mem[0x3000] = 0
+    self.sim.mem[0x3001] = 0
+    self.sim.mem[0x3002] = 0
+    self.sim.mem[0x3003] = 0
+    self.sim.mem[0x3004] = 0
+    self.sim.mem[0x0180] = 0x1000
+    self.sim.setPriority(3)
+    self.sim.addInterruptTrigger(0x80, 7, trigger)
+    self.sim.stepN(1)
+    self.assertEqual(True, self.called)
+    self.assertEqual(0x1000, self.sim.getPC())
+
+  def test_NoIntTrigger(self):
+    self.called = False
+    def trigger ():
+      self.called = True
+      return True
+    self.sim.setPC(0x3000)
+    self.sim.mem[0x3000] = 0
+    self.sim.mem[0x3001] = 0
+    self.sim.mem[0x3002] = 0
+    self.sim.mem[0x3003] = 0
+    self.sim.mem[0x3004] = 0
+    self.sim.mem[0x0181] = 0x1000
+    self.sim.setPriority(7)
+    self.sim.addInterruptTrigger(0x81, 7, trigger)
+    self.sim.stepN(1)
+    self.assertEqual(True, self.called)
+    self.assertNotEqual(0x1000, self.sim.getPC())
+
+class TestStep(unittest.TestCase):
+  def setUp(self):
+    self.sim = pylc3.simulator()
+
+  def test_NoFunc(self):
+    self.sim.mem[0x3000] = 0
+    self.sim.mem[0x3001] = 0
+    self.sim.mem[0x3002] = 0
+    self.sim.mem[0x3003] = 0
+    self.sim.mem[0x3004] = 0
+    self.sim.setPC(0x3000)
+    self.sim.stepN(1)
+    self.assertEqual(0x3001, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.stepN(2)
+    self.assertEqual(0x3002, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.stepN(3)
+    self.assertEqual(0x3003, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.stepN(4)
+    self.assertEqual(0x3004, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.stepN(5)
+    self.assertEqual(0x3005, self.sim.getPC())
+
+  def test_Func(self):
+    self.sim.setReg(4,0x4000)
+    self.sim.mem[0x3000] = JSRR | SETSR1(4)
+    self.sim.mem[0x3001] = NOP
+    self.sim.mem[0x3002] = NOP
+    self.sim.mem[0x3003] = NOP
+    self.sim.mem[0x3004] = NOP
+    self.sim.mem[0x4000] = RET
+    self.sim.setPC(0x3000)
+    self.sim.stepN(1)
+    self.assertEqual(0x4000, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.stepN(2)
+    self.assertEqual(0x3001, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.stepN(3)
+    self.assertEqual(0x3002, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.stepN(4)
+    self.assertEqual(0x3003, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.stepN(5)
+    self.assertEqual(0x3004, self.sim.getPC())
+
+
+class TestNext(unittest.TestCase):
+  def setUp(self):
+    self.sim = pylc3.simulator()
+
+  def test_NoFunc(self):
+    self.sim.mem[0x3000] = 0
+    self.sim.mem[0x3001] = 0
+    self.sim.mem[0x3002] = 0
+    self.sim.mem[0x3003] = 0
+    self.sim.mem[0x3004] = 0
+    self.sim.setPC(0x3000)
+    self.sim.stepN(1)
+    self.assertEqual(0x3001, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.stepN(2)
+    self.assertEqual(0x3002, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.stepN(3)
+    self.assertEqual(0x3003, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.stepN(4)
+    self.assertEqual(0x3004, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.stepN(5)
+    self.assertEqual(0x3005, self.sim.getPC())
+
+  def test_Func(self):
+    self.sim.setReg(4,0x4000)
+    self.sim.mem[0x3000] = JSRR | SETSR1(4)
+    self.sim.mem[0x3001] = 0
+    self.sim.mem[0x3002] = 0
+    self.sim.mem[0x3003] = 0
+    self.sim.mem[0x3004] = 0
+    self.sim.mem[0x4000] = RET
+    self.sim.setPC(0x3000)
+    self.sim.nextN(1)
+    self.assertEqual(0x3001, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.nextN(2)
+    self.assertEqual(0x3002, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.nextN(3)
+    self.assertEqual(0x3003, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.nextN(4)
+    self.assertEqual(0x3004, self.sim.getPC())
+    self.sim.setPC(0x3000)
+    self.sim.nextN(5)
+    self.assertEqual(0x3005, self.sim.getPC())
+
 
 doTest(TestAdd)
 doTest(TestAnd)
 doTest(TestWatchPoint)
 doTest(TestBreakPoint)
+doTest(TestInterruptTrigger)
+doTest(TestStep)
+doTest(TestNext)

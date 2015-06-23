@@ -10,13 +10,39 @@
  * @param cycles number of cycles to step
  * @return false if exception occurred
  */
-bool simulator::stepN( int cycles ) {
+bool simulator::stepN( int cycles){
+        return this->simulate(cycles, true, false);
+}
+
+bool simulator::nextN( int cycles){
+        return this->simulate(cycles, false, false);
+}
+
+bool callsFunctionP( uint16_t instruction) {
+        enum opcode op = inst2opcode(instruction);
+        return (((op == JSR)) || (op == TRAP));
+}
+
+bool returnsP( uint16_t instruction) {
+        enum opcode op = inst2opcode(instruction);
+        return ((op == RTI) || ((op == JMP) && (inst2sr1(instruction) == 7)));
+}
+
+
+bool simulator::simulate( int cycles, bool countCallsP, bool stopOnRetP) {
         int cyclesElapsed = 0;
         bool exceptionP = true;
+        uint16_t lastinst = 0;
+        int callCount = 0, retCount = 0;
         do {
+                lastinst = this->memory[this->PC];
                 exceptionP = this->doInst(this->memRead(this->PC));
-                cyclesElapsed++;
-                for (std::vector<BreakPoint>::iterator it = this->breakPoints.begin()
+                if (returnsP(lastinst)) retCount++;
+                else if (callsFunctionP(lastinst))callCount++;
+                if (retCount > callCount) retCount = callCount = 0;
+                if (countCallsP || retCount == callCount) cyclesElapsed++;
+                for (std::vector<BreakPoint>::iterator it
+                             = this->breakPoints.begin()
                              ; it != this->breakPoints.end()
                              ; ++it){
                         if (it->address == this->PC) {
@@ -25,6 +51,32 @@ bool simulator::stepN( int cycles ) {
                                                                   , it->address);
                                 else if (it->Ccb)
                                         it->Ccb(it->address);
+                        }
+                }
+                for (std::vector<InterruptTrigger>::iterator it
+                             = this->interruptTriggers.begin()
+                             ; it != this->interruptTriggers.end()
+                             ; ++it){
+                        if (!it->triggeredP && boost::python::call<bool>(it->cb)) {
+                                it->triggeredP = true;
+                        }
+                        if (it->triggeredP && it->priority > this->Priority) {
+                                it->triggeredP = false;
+                                if (this->getPcsrBit('s')) {
+                                        this->USP = this->getReg(6);
+                                        this->setReg(6,this->SSP);
+                                }
+                                this->setReg(6, this->getReg(6) - 1);
+                                this->memWrite(this->getReg(6)
+                                               , this->getPcsrBit('s') << 15
+                                               | this->Priority << 8
+                                               | this->getPcsrBit('n') << 2
+                                               | this->getPcsrBit('z') << 1
+                                               | this->getPcsrBit('p') << 0);
+                                this->setReg(6, this->getReg(6) - 1);
+                                this->memWrite(this->getReg(6),this->PC);
+                                this->setPcsrBit('s',false);
+                                this->PC = this->memRead(it->address + 0x100);
                         }
                 }
         }while (exceptionP && ((cycles == 0) || (cyclesElapsed < cycles)));
@@ -231,10 +283,15 @@ bool simulator::doInst( uint16_t inst ) {
                 this->regs[6]++;
                 result = this->memRead(this->regs[6]);
                 this->S = (result & (1 << 15)) != 0;
+                this->Priority = (result & (0x7 << 8)) >> 8;
                 this->N = (result & (1 << 2))  != 0;
                 this->Z = (result & (1 << 1))  != 0;
                 this->P = (result & (1 << 0))  != 0;
                 this->regs[6]++;
+                if (this->S == 1) {
+                        this->SSP = this->getReg(6);
+                        this->setReg(6,this->USP);
+                }
                 break;
 
         default:
@@ -397,6 +454,13 @@ bool simulator::setPC(uint16_t pc){
         return true;
 }
 
+uint16_t simulator::getPriority(void){ return this->Priority; }
+bool simulator::setPriority(uint8_t newPriority){
+        if(Priority >= 8) return false;
+        this->Priority = newPriority;
+        return true;
+}
+
 /**
  * @brief Add a watch point to the simulator
  * @details Watch points can be triggered on any combination of read/write
@@ -491,4 +555,15 @@ void simulator::setRefreshGUIMemHook(std::function<void (void)> handlerFunction)
 }
 void simulator::refreshGUIMemCall(void){
     if(refreshGUIMem) refreshGUIMem();
+}
+
+bool simulator::addInterruptTrigger(uint8_t intnum, uint8_t priority, PyObject* cb) {
+        if(intnum < 1<<7) return false;
+        InterruptTrigger it;
+        it.cb = cb;
+        it.address = intnum;
+        it.priority = priority;
+        it.triggeredP = false;
+        interruptTriggers.push_back(it);
+        return true;
 }

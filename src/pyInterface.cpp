@@ -14,6 +14,7 @@ BOOST_PYTHON_MODULE(pylc3)
 
   object pySim = class_<simulator>("simulator")
     .def("stepN", &simulator::stepN)
+    .def("nextN", &simulator::nextN)
     .def("doInst"  , &simulator::doInst)
     .def_readwrite("mem", &simulator::memory)
     .def("getReg"  , &simulator::getReg)
@@ -25,8 +26,11 @@ BOOST_PYTHON_MODULE(pylc3)
     .def("load", &simulator::loadBinFile)
     .def("run", &simulator::run)
     .def("refreshGUI", &simulator::refreshGUIMemCall)
-    .def("getPC", &simulator::getPC) 
-    .def("setPC", &simulator::setPC);
+    .def("getPC", &simulator::getPC)
+    .def("setPC", &simulator::setPC)
+    .def("addInterruptTrigger", &simulator::addInterruptTrigger)
+    .def("getPriority", &simulator::getPriority)
+    .def("setPriority", &simulator::setPriority);
 
     object mSim = pySim(); //Construct one
 }
