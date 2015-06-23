@@ -1,9 +1,11 @@
-# QtLC3
-A better LC3 Simulator written in Qt
+# pylc3
 
-# Build Instructions
-    qmake
-    make
-# Additional Information
 
-[Visit my Website](http://minionhut.com/blog/new-lc3-simulator) for more info!
+## Build Instructions
+```
+$make
+```
+## Test Instructions
+```
+$make test
+```
