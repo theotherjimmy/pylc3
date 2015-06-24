@@ -1,0 +1,10 @@
+Package: python2-pylc3
+Source: pylc3
+Version: 0.0-1
+Architecture: amd64
+Maintainer: Jimmy <foo@bar.baz>
+Installed-Size: 243
+Depends: libboost-python1.54.0, libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libpython2.7 (>= 2.7), libstdc++6 (>= 4.5)
+Section: misc
+Priority: optional
+Description: python lc3 simulator library
