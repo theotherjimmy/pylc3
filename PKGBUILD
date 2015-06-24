@@ -1,6 +1,6 @@
 
 # Maintainer: Jimmy Brisson <theotherjimmy@gmail.com>
-pkgname=pylc3-git
+pkgname=python2-pylc3-git
 pkgrel=1
 pkgver=r124.a7e5aae
 pkgdesc="A python and C++ LC-3 simulator"
