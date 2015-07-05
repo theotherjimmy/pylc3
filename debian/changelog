@@ -1,3 +1,9 @@
+pylc3 (0.0-2) trusty; urgency=medium
+
+  * Initial release. 
+
+ --  <michael.bartling15+dev@gmail.com>  Sun, 5 Jul 2015 11:35:40 -0500
+
 pylc3 (0.0-1) trusty; urgency=medium
 
   * Initial release. 
