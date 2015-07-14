@@ -1,4 +1,22 @@
-pylc3 (0.0-1) UNRELEASED; urgency=medium
+pylc3 (0.0-4) trusty; urgency=medium
+
+  * Added python and boost to the build dependencies
+
+ --  <michael.bartling15+dev@gmail.com>  Sun, 5 Jul 2015 12:21:40 -0500
+
+pylc3 (0.0-3) trusty; urgency=medium
+
+  * Bug fix
+
+ --  <michael.bartling15+dev@gmail.com>  Sun, 5 Jul 2015 12:09:40 -0500
+
+pylc3 (0.0-2) trusty; urgency=medium
+
+  * Initial release. 
+
+ --  <michael.bartling15+dev@gmail.com>  Sun, 5 Jul 2015 11:35:40 -0500
+
+pylc3 (0.0-1) trusty; urgency=medium
 
   * Initial release. 
 
