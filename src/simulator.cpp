@@ -32,8 +32,11 @@ bool returnsP( uint16_t instruction) {
 bool simulator::simulate( int cycles, bool countCallsP, bool stopOnRetP) {
         int cyclesElapsed = 0;
         bool exceptionP = true;
+        bool breakPointTriggered = false;
+
         uint16_t lastinst = 0;
         int callCount = 0, retCount = 0;
+        
         do {
                 if(isHalted) break;
 
@@ -43,18 +46,29 @@ bool simulator::simulate( int cycles, bool countCallsP, bool stopOnRetP) {
                 else if (callsFunctionP(lastinst))callCount++;
                 if (retCount > callCount) retCount = callCount = 0;
                 if (countCallsP || retCount == callCount) cyclesElapsed++;
-                for (std::vector<BreakPoint>::iterator it
-                             = this->breakPoints.begin()
-                             ; it != this->breakPoints.end()
-                             ; ++it){
-                        if (it->address == this->PC) {
-                                if (it->PythonP)
-                                        boost::python::call<void>(it->Pycb
-                                                                  , it->address);
-                                else if (it->Ccb)
-                                        it->Ccb(it->address);
-                        }
+
+                if(prevBreakPtState == WAS_BREAKPOINT){
+                    prevBreakPtState = NOT_BREAKPOINT;
+                }else{
+                    for (std::vector<BreakPoint>::iterator it
+                                 = this->breakPoints.begin()
+                                 ; it != this->breakPoints.end()
+                                 ; ++it){
+                            if (it->address == this->PC) {
+                                    breakPointTriggered = true; //Lets 
+                                    if (it->PythonP)
+                                            boost::python::call<void>(it->Pycb
+                                                                      , it->address);
+                                    else if (it->Ccb)
+                                            it->Ccb(it->address);
+                            }
+                    }
                 }
+                if(breakPointTriggered){
+                    prevBreakPtState = WAS_BREAKPOINT;
+                    break;
+                }
+
                 for (std::vector<InterruptTrigger>::iterator it
                              = this->interruptTriggers.begin()
                              ; it != this->interruptTriggers.end()

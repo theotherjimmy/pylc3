@@ -107,5 +107,7 @@ private:
         std::function<void (void)> refreshGUIMem;
         bool isHalted;
 
+        enum BreakPointState_e { WAS_BREAKPOINT = 0 , NOT_BREAKPOINT };
+        BreakPointState_e prevBreakPtState = NOT_BREAKPOINT;
 
 };
