@@ -49,15 +49,6 @@ bool simulator::simulate( int cycles, bool countCallsP, bool stopOnRetP) {
         int callCount = 0, retCount = 0;
 
         do {
-                if(isHalted) break;
-
-                lastinst = this->memory[this->PC];
-                exceptionP = this->doInst(this->memRead(this->PC));
-                if (returnsP(lastinst)) retCount++;
-                else if (callsFunctionP(lastinst))callCount++;
-                if (retCount > callCount) retCount = callCount = 0;
-                if (countCallsP || retCount == callCount) cyclesElapsed++;
-
                 if(prevBreakPtState == WAS_BREAKPOINT){
                     prevBreakPtState = NOT_BREAKPOINT;
                 }else{
@@ -77,8 +68,15 @@ bool simulator::simulate( int cycles, bool countCallsP, bool stopOnRetP) {
                 }
                 if(breakPointTriggered){
                     prevBreakPtState = WAS_BREAKPOINT;
-                    break;
+                    return false;
                 }
+
+                lastinst = this->memory[this->PC];
+                exceptionP = this->doInst(this->memRead(this->PC));
+                if (returnsP(lastinst)) retCount++;
+                else if (callsFunctionP(lastinst))callCount++;
+                if (retCount > callCount) retCount = callCount = 0;
+                if (countCallsP || retCount == callCount) cyclesElapsed++;
 
                 for (std::vector<InterruptTrigger>::iterator it
                              = this->interruptTriggers.begin()
@@ -301,9 +299,13 @@ bool simulator::doInst( uint16_t inst ) {
                 break;
 
         case TRAP:
+                if(inst2trapvec8(inst) == 0x25) {
+                        std::cerr << "found the halt instruction\n";
+                        this->isHalted = true;
+                        return false;
+                }
                 this->regs[7] = this->PC;
                 this->PC = this->memRead(inst2trapvec8(inst));
-                if(inst2trapvec8(inst) == 0x25) isHalted = true;
                 break;
 
         case RTI:
@@ -562,13 +564,8 @@ bool simulator::addBreakPoint(uint16_t addr, std::function<void (uint16_t)> cb) 
 }
 
 bool simulator::run(){
-    while(true){
-        if(this->PC == this->memory[0x25]) break; //Break if halted
-        if(isHalted) break;
-        this->stepN(1);
-    }
-
-    return true;
+        while(!this->isHalted && this->stepN(1));
+        return true;
 }
 
 void doJack(uint16_t address, uint16_t newVal){
