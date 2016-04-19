@@ -90,6 +90,8 @@ public:
         void refreshGUIMemCall(void);
         uint16_t memRead( uint16_t addr );
         void memWrite( uint16_t addr, uint16_t newVal );
+
+        void removeBreakPoint( uint16_t addr );
 private:
         vector<uint16_t> regs = vector<uint16_t>(NUM_REGS);
         vector<WatchPoint> watchPoints = vector<WatchPoint>();
