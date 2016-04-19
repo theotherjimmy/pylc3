@@ -61,8 +61,10 @@ all: $(PYLC3)
 test: cpp-test.txt python-test
 
 install: $(PYLC3)
-	mkdir -p ${DESTDIR}/usr/lib/python2.7/dist-packages/
-	install ${PYLC3} ${DESTDIR}/usr/lib/python2.7/dist-packages/
+	mkdir -p ${DESTDIR}${PREFIX}/lib/python2.7/dist-packages/
+	install ${PYLC3} ${DESTDIR}${PREFIX}/lib/python2.7/dist-packages/
+	mkdir -p ${DESTDIR}${PREFIX}/share/pylc3
+	install share/pylc3/lc3os.obj ${DESTDIR}${PREFIX}/share/pylc3/lc3os.obj
 
 cpp-test.txt: $(TEST)
 	${debug}(./$< > $@ && echo "All C++ tests passed") || cat $@
