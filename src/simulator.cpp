@@ -274,7 +274,7 @@ bool simulator::doInst( uint16_t inst ) {
 
         case TRAP:
                 this->regs[7] = this->PC;
-                this->PC = inst2trapvec8(inst);
+                this->PC = this->memRead(inst2trapvec8(inst));
                 break;
 
         case RTI:
