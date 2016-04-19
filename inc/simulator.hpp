@@ -51,23 +51,23 @@ class simulator{
 public:
         using MEM_type = vector<uint16_t>;
         vector<uint16_t> memory = vector<uint16_t>(ADDRESS_SPACE);
-        
-        simulator() { memory[0xFE04] = 0x8000;}
+
+        simulator();
         bool stepN( int cycles );
         bool nextN( int cycles );
         bool doInst( uint16_t );
-        
+
         vector<uint16_t> sliceMem ( uint16_t start, uint16_t stop );
-        
+
         uint16_t getReg ( int number );
         bool setReg ( int number , uint16_t newVal);
-        
+
         bool getPcsrBit ( char mnemonic );
         bool setPcsrBit ( char mnemonic , bool newVal);
-        
+
         uint16_t getPC(void);
         bool setPC(uint16_t);
-        
+
         uint16_t getPriority(void);
         bool setPriority(uint8_t newPriority);
 
@@ -78,15 +78,15 @@ public:
         bool addBreakPoint(uint16_t addr, std::function<void (uint16_t)> cb);
         bool addInterruptTrigger(uint8_t intnum, uint8_t priority, PyObject* cb);
         int getNumWatchPoints();
-        
+
         bool loadBinFile(std::string);
-        
+
         bool run();
-        
+
         void setOnMemChanged(std::function<void (uint16_t, uint16_t)> handlerFunction);
         void setOnEndOfCycle(std::function<void (void)> handlerFunction);
         void setRefreshGUIMemHook(std::function<void (void)> handlerFunction);
-        
+
         void refreshGUIMemCall(void);
         uint16_t memRead( uint16_t addr );
         void memWrite( uint16_t addr, uint16_t newVal );
