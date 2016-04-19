@@ -168,6 +168,23 @@ class TestBreakPoint(unittest.TestCase):
     self.sim.stepN(5)
     self.assertEqual(False, self.called)
 
+  def test_DoubleBreak(self):
+    self.called = [False, False]
+    def break0 (a):
+      self.called[0] = True
+    def break1 (a):
+      self.called[1] = True
+    self.sim.setPC(0x3000)
+    self.sim.mem[0x3000] = 0
+    self.sim.mem[0x3001] = 0
+    self.sim.mem[0x3002] = 0
+    self.sim.mem[0x3003] = 0
+    self.sim.mem[0x3004] = 0
+    self.sim.addBreakPoint(0x3001, break0)
+    self.sim.addBreakPoint(0x3002, break1)
+    self.sim.stepN(5)
+    self.assertEual([True,False],self.called)
+
 class TestInterruptTrigger(unittest.TestCase):
   def setUp(self):
     self.sim = pylc3.simulator()

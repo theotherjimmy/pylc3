@@ -2,6 +2,17 @@
 #include "simulator-internals.hpp"
 #include <boost/python.hpp>
 #include <fstream>
+#include <iostream>
+
+simulator::simulator( ){
+        if (!(this->loadBinFile(PREFIX "/share/pylc3/lc3os.obj"))) {
+                std::cerr << "WARNING: could not load lc3 os."
+                          << " expected to find it at "
+                          << PREFIX  << "/share/pylc3/lc3os.obj" << "\n"
+                          << "  Functions like puts and gets will not work.\n" ;
+        }
+        memory[0xFE04] = 0x8000;
+}
 
 /**
  * @brief step forward N cycles
@@ -36,7 +47,7 @@ bool simulator::simulate( int cycles, bool countCallsP, bool stopOnRetP) {
 
         uint16_t lastinst = 0;
         int callCount = 0, retCount = 0;
-        
+
         do {
                 if(isHalted) break;
 

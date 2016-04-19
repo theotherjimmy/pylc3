@@ -19,6 +19,8 @@ GTEST_INC := $(GTEST_DIR)/include
 #makefile debugging
 debug ?= @
 
+PREFIX ?= /usr
+
 #choose based on system
 GTEST_LIB := -lgtest
 
@@ -39,6 +41,7 @@ CXXFLAGS += -Wall
 CXXFLAGS += -Wno-sign-compare
 CXXFLAGS += -Werror
 CXXFLAGS += -fPIC
+CXXFLAGS += -DPREFIX=\"${PREFIX}\"
 DEFS ?= -DPHASE_A -DPHASE_B -DPHASE_C
 PYDEFS ?= -DPHASE_A -DPHASE_B -DPHASE_C
 
