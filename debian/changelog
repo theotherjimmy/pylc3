@@ -1,3 +1,21 @@
+pylc3 (0.0-4ubuntu3) trusty; urgency=medium
+
+  * Fixed depends in control file
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Tue, 19 Apr 2016 14:38:52 -0500
+
+pylc3 (0.0-4ubuntu2) trusty; urgency=medium
+
+  * to make PPA happy 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Tue, 19 Apr 2016 14:33:04 -0500
+
+pylc3 (0.0-4ubuntu1) trusty; urgency=medium
+
+  * Fixed a small bug in trap vector handling. 
+
+ -- Michael Bartling <michael.bartling15+dev@gmail.com>  Tue, 19 Apr 2016 13:58:16 -0500
+
 pylc3 (0.0-4) trusty; urgency=medium
 
   * Added python and boost to the build dependencies

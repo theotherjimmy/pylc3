@@ -7,5 +7,5 @@ Build-Depends: debhelper (>= 9), python-all-dev, libboost-all-dev
 
 Package: python2-pylc3
 Architecture: any
-Depends: ${shlibs:Depends} ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: python lc3 simulator library
