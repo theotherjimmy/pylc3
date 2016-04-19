@@ -586,3 +586,15 @@ bool simulator::addInterruptTrigger(uint8_t intnum, uint8_t priority, PyObject* 
         interruptTriggers.push_back(it);
         return true;
 }
+
+void simulator::removeBreakPoint(uint16_t addr){
+    for (std::vector<BreakPoint>::iterator it
+             = this->breakPoints.begin()
+             ; it != this->breakPoints.end()
+             ; ++it){
+        if (it->address == addr) {
+            breakPoints.erase(it);
+            break;    
+        }
+    }
+}
