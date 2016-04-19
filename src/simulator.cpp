@@ -35,6 +35,8 @@ bool simulator::simulate( int cycles, bool countCallsP, bool stopOnRetP) {
         uint16_t lastinst = 0;
         int callCount = 0, retCount = 0;
         do {
+                if(isHalted) break;
+
                 lastinst = this->memory[this->PC];
                 exceptionP = this->doInst(this->memRead(this->PC));
                 if (returnsP(lastinst)) retCount++;
@@ -127,6 +129,7 @@ bool simulator::loadBinFile( std::string filename ) {
 
         }
         in.close();
+        isHalted = false;
         return true;
 }
 
@@ -275,6 +278,7 @@ bool simulator::doInst( uint16_t inst ) {
         case TRAP:
                 this->regs[7] = this->PC;
                 this->PC = this->memRead(inst2trapvec8(inst));
+                if(inst2trapvec8(inst) == 0x25) isHalted = true;
                 break;
 
         case RTI:
@@ -534,7 +538,8 @@ bool simulator::addBreakPoint(uint16_t addr, std::function<void (uint16_t)> cb) 
 
 bool simulator::run(){
     while(true){
-        if(this->PC == 0x25) break;
+        if(this->PC == this->memory[0x25]) break; //Break if halted
+        if(isHalted) break;
         this->stepN(1);
     }
 
