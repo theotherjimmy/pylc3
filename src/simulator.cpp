@@ -5,6 +5,7 @@
 #include <iostream>
 
 simulator::simulator( ){
+        memory = vector<uint16_t>(ADDRESS_SPACE);
         if (!(this->loadBinFile(PREFIX "/share/pylc3/lc3os.obj"))) {
                 std::cerr << "WARNING: could not load lc3 os."
                           << " expected to find it at "
@@ -48,7 +49,7 @@ bool simulator::simulate( int cycles, bool countCallsP, bool stopOnRetP) {
         uint16_t lastinst = 0;
         int callCount = 0, retCount = 0;
 
-        do {
+        while (exceptionP && ((cycles == 0) || (cyclesElapsed < cycles))){
                 if(prevBreakPtState == WAS_BREAKPOINT){
                     prevBreakPtState = NOT_BREAKPOINT;
                 }else{
@@ -104,7 +105,7 @@ bool simulator::simulate( int cycles, bool countCallsP, bool stopOnRetP) {
                                 this->PC = this->memRead(it->address + 0x100);
                         }
                 }
-        }while (exceptionP && ((cycles == 0) || (cyclesElapsed < cycles)));
+        }
 
         //GUI Hook
         if(onEndOfCycle){
@@ -564,8 +565,7 @@ bool simulator::addBreakPoint(uint16_t addr, std::function<void (uint16_t)> cb) 
 }
 
 bool simulator::run(){
-        while(!this->isHalted && this->stepN(1));
-        return true;
+        return this->stepN(0);
 }
 
 void doJack(uint16_t address, uint16_t newVal){

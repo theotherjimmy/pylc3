@@ -50,7 +50,7 @@ struct InterruptTrigger {
 class simulator{
 public:
         using MEM_type = vector<uint16_t>;
-        vector<uint16_t> memory = vector<uint16_t>(ADDRESS_SPACE);
+        vector<uint16_t> memory;
 
         simulator();
         bool stepN( int cycles );

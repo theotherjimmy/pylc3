@@ -29,26 +29,24 @@ class SortingTest(unittest.TestCase):
   #The Setup class is provided by unittest and is run before each test
   def setUp(self):
     self.sim = pylc3.simulator()
-    self.sim.load("sortscores.obj")
+    self.sim.load("../sortscores.obj")
     # print("Done Initializing Simulator")
 
   def test_ProvidedInDocument(self):
-    gradeList = [upperHalf(23) | lowerHalf(78), \
-                 upperHalf(10) | lowerHalf(91), \
-                 upperHalf(56) | lowerHalf(5),  \
+    gradeList = [upperHalf(23) | lowerHalf(78),
+                 upperHalf(10) | lowerHalf(91),
+                 upperHalf(56) | lowerHalf(5),
                  upperHalf(2) | lowerHalf(87)]
-    
     self.sim.mem[0x3200:(0x3200 + len(gradeList))] = gradeList
     self.sim.run()
 
-    progOutList = self.sim.mem[0x3200:(0x3200 + len(gradeList))]
+    progOutList = [i for i in self.sim.mem[0x3200:(0x3200 + len(gradeList))]]
 
     #Python Sorts are guaranteed to be stable, so we can check if their output is correctly sorted
     # in just one line :) (We dont care whether the student implemented stable vs unstable sort)
     # Note, mem returns a pylc3.mem object, so we need to cast it to a list to print
-    Expected = progOutList # Sorted Sorts the list in place
-    sorted(Expected, key = lambda grade : grade & 0xFF, reverse=True)
-    self.assertEqual(Expected, progOutList)
+
+    self.assertEqual(sorted(progOutList, key = lowerHalf, reverse=True), progOutList)
 
   # Generate A random Test
   def test_random_1(self):
@@ -63,13 +61,11 @@ class SortingTest(unittest.TestCase):
     self.sim.mem[0x3200:(0x3200 + len(gradeList))] = gradeList
     self.sim.run()
 
-    progOutList = self.sim.mem[0x3200:(0x3200 + len(gradeList))]
+    progOutList = [i for i in self.sim.mem[0x3200:(0x3200 + len(gradeList))]]
 
     #Python Sorts are guaranteed to be stable, so we can check if their output is correctly sorted
     # in just one line :) (We dont care whether the student implemented stable vs unstable sort)
-    Expected = progOutList  # Sorted Sorts the list in place
-    sorted(Expected, key = lambda grade : grade & 0xFF, reverse=True)
-    self.assertEqual(Expected, progOutList)
+    self.assertEqual(sorted(progOutList, key = lowerHalf, reverse=True), progOutList)
 
 
 grader.doTest(SortingTest)
