@@ -65,6 +65,8 @@ install: $(PYLC3)
 	install ${PYLC3} ${DESTDIR}${PREFIX}/lib/python2.7/dist-packages/
 	mkdir -p ${DESTDIR}${PREFIX}/share/pylc3
 	install ../share/pylc3/lc3os.obj ${DESTDIR}${PREFIX}/share/pylc3/lc3os.obj
+	mkdir -p ${DESTDIR}${PREFIX}/include/pylc3
+	install ../inc/simulator.hpp ${DESTDIR}${PREFIX}/include/pylc3/simulator.hpp
 	ln -fs ${PREFIX}/lib/python2.7/dist-packages/${PYLC3} ${DESTDIR}${PREFIX}/lib/lib${PYLC3}
 
 cpp-test.txt: $(TEST)
