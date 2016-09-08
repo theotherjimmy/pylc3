@@ -6,10 +6,10 @@
 
 simulator::simulator( ){
         memory = vector<uint16_t>(ADDRESS_SPACE);
-        if (!(this->loadBinFile(PREFIX "/share/pylc3/lc3os.obj"))) {
+        if (!(this->loadBinFile(PREFIX "lc3os.obj"))) {
                 std::cerr << "WARNING: could not load lc3 os."
                           << " expected to find it at "
-                          << PREFIX  << "/share/pylc3/lc3os.obj" << "\n"
+                          << PREFIX  << "lc3os.obj" << "\n"
                           << "  Functions like puts and gets will not work.\n" ;
         }
         memory[0xFE04] = 0x8000;

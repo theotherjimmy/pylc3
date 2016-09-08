@@ -1,0 +1,14 @@
+language: cpp
+sudo: required
+dist: trusty
+compiler:
+- g++
+os:
+- linux
+python: 2.7.12
+before_install:
+- echo $LANG
+- echo $LC_ALL
+before_script:
+- travis_retry bundle
+script: cmake 
