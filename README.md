@@ -1,5 +1,4 @@
 # pylc3
-[![Build Status](https://travis-ci.org/mbartling/QtLC3.svg?branch=master)](https://travis-ci.org/mbartling/QtLC3)
 
 ## Installation Instructions
 [Installation](http://minionhut.com/blog/post/installing-the-lc3-simulator)
