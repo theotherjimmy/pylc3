@@ -10,5 +10,8 @@ before_install:
 - echo $LANG
 - echo $LC_ALL
 before_script:
-- travis_retry bundle
-script: cmake 
+- sudo apt-get update
+- sudo apt-get install qtbase5-dev
+- sudo apt-get install libboost-dev
+- sudo apt-get install libboost-python-dev
+script: cmake . && make
