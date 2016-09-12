@@ -1,4 +1,5 @@
 # pylc3
+[![Build Status](https://travis-ci.org/theotherjimmy/pylc3.png)](https://travis-ci.org/theotherjimmy/pylc3)
 
 ## Installation Instructions
 [Installation](http://minionhut.com/blog/post/installing-the-lc3-simulator)
