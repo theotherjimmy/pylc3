@@ -23,6 +23,7 @@ target_link_libraries(pylc3
 target_link_libraries(libpylc3 
   ${Boost_LIBRARIES}
   ${PYTHON_LIBRARIES})
+set(CMAKE_SHARED_LIBRARY_PREFIX "")
 target_compile_definitions(pylc3 PRIVATE PREFIX="${DESTDIR}")
 target_compile_features(pylc3 PRIVATE cxx_range_for)
 target_compile_features(libpylc3 PRIVATE cxx_range_for)
