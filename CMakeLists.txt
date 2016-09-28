@@ -30,3 +30,6 @@ target_compile_features(libpylc3 PRIVATE cxx_range_for)
 target_compile_definitions(libpylc3 PRIVATE PREFIX="${DESTDIR}")
 install(TARGETS pylc3 DESTINATION /usr/lib/python2.7/dist-packages)
 install(TARGETS libpylc3 DESTINATION /usr/lib)
+
+file(GLOB INCLUDES inc/*.hpp)
+install(FILE ${INCLUDES} DESTINATION /usr/lib/pylc3)
